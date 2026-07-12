@@ -1,0 +1,4 @@
+# Ignora configurações do editor na raiz
+.vscode/
+.idea/
+.DS_Store

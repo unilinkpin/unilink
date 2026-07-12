@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/unilink_db
+    username: unilink_user
+    password: unilink_password
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      # IMPORTANTE: validate diz ao JPA para APENAS validar se as tabelas existem, mas nunca criá-las.
+      # Quem cria as tabelas agora é o Flyway.
+      ddl-auto: validate
+    show-sql: true # Mostra os comandos SQL no terminal (ótimo para debugar)
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true # Essencial para não dar erro se o banco já tiver algo
+
+server:
+  port: 8080
