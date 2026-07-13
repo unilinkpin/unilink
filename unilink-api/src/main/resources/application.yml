@@ -4,6 +4,10 @@ spring:
     username: unilink_user
     password: unilink_password
     driver-class-name: org.postgresql.Driver
+
+  security:
+    user:
+      password: ""
   
   jpa:
     hibernate:

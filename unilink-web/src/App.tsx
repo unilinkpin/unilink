@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './features/auth/Login';
+import Register from './features/auth/Register';
 
 function App() {
   return (
@@ -8,8 +9,16 @@ function App() {
         {/* =========================================
             MÓDULO: AUTH & USER (DEV 1)
         ========================================= */}
+
+        {/* Rota padrão redirecionando para o login */}
+        <Route path="/" element={<Navigate to="/auth/login" />} />
+
+        {/* Rotas de Autenticação */}
         <Route path="/login" element={<Login />} />
         {/* <Route path="/perfil" element={<Perfil />} /> */}
+
+        {/* A ROTA QUE ESTAVA FALTANDO! 👇 */}
+        <Route path="/auth/register" element={<Register />} />
 
         {/* =========================================
             MÓDULO: DISCOVERY & CAMPUS (DEV 2)

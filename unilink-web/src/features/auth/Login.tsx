@@ -1,22 +1,35 @@
 import React, { useState } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
+import { useNavigate } from 'react-router-dom';
 
-// Importe a logo corretamente
+// Certifique-se de que a importação nomeada usa as chaves { }
+import { authService } from './authService';
+
+// @ts-ignore
 import logoImg from '../../assets/logo.png'; 
-
-// Importando todo o CSS separado
 import * as S from './styles';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null); 
+  
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Tentativa de login:', { email, senha });
-    alert('Formulário enviado! Verifique o console.');
+    setError(null);
+
+    try {
+      const userData = await authService.login(email, senha);
+      localStorage.setItem('@UniLink:user', JSON.stringify(userData));
+      navigate('/discovery'); 
+    } catch (err: any) {
+      const errorMessage = err.response?.data || 'Ocorreu um erro ao tentar entrar. Tente novamente.';
+      setError(errorMessage);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -25,17 +38,17 @@ export default function Login() {
 
   return (
     <S.LoginScreenContainer>
-      {/* Seção Esquerda: Logo e Slogan */}
       <S.LogoSection>
         <S.LogoImage src={logoImg} alt="Logo UniLink" />
         <S.SloganText>Conectando a comunidade universitária</S.SloganText>
       </S.LogoSection>
 
-      {/* Seção Direita: Formulário */}
       <S.FormSection>
         <S.LoginContainer>
           <S.LoginForm onSubmit={handleLogin}>
             
+            {error && <div style={{ color: '#ff4d4d', marginBottom: '15px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
+
             <S.InputGroup>
               <S.Label htmlFor="email">E-mail</S.Label>
               <S.InputWrapper>
@@ -63,7 +76,7 @@ export default function Login() {
                   placeholder="........."
                   required
                 />
-                <S.PasswordToggle onClick={togglePasswordVisibility}>
+                <S.PasswordToggle type="button" onClick={togglePasswordVisibility}>
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </S.PasswordToggle>
               </S.InputWrapper>
@@ -84,7 +97,7 @@ export default function Login() {
           </S.GoogleButton>
 
           <S.SignUpLink>
-            Não tem conta? <S.SignUpHighlight>Cadastre-se</S.SignUpHighlight>
+            Não tem conta? <S.SignUpHighlight onClick={() => navigate('/auth/register')}>Cadastre-se</S.SignUpHighlight>
           </S.SignUpLink>
         </S.LoginContainer>
       </S.FormSection>

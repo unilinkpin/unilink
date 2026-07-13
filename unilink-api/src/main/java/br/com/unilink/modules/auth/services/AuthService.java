@@ -30,23 +30,31 @@ public class AuthService {
         return new LoginResponse(usuario.getId(), usuario.getNomeCompleto(), usuario.getEmail(), usuario.getTipoVinculo());
     }
 
+    // LÓGICA DE REGISTRO
     public String registrar(RegisterRequest request) {
+        // 1. Verifica se o e-mail já está em uso
         if (usuarioRepository.existsByEmail(request.email())) {
             throw new RuntimeException("Este e-mail já está em uso.");
         }
 
-        // Validação básica do ENUM esperado por String
-        if (!request.tipoVinculo().equals("Estudante Universitário") && !request.tipoVinculo().equals("Servidor / Professor")) {
+        // 2. Validação do tipo de vínculo
+        if (!request.tipoVinculo().equals("Estudante Universitário") && 
+            !request.tipoVinculo().equals("Servidor / Professor")) {
             throw new RuntimeException("Tipo de vínculo inválido.");
         }
 
+        // 3. Criação do novo usuário
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNomeCompleto(request.nomeCompleto());
         novoUsuario.setEmail(request.email());
+        
+        // CRÍTICO: Criptografa a senha antes de salvar no banco!
         novoUsuario.setSenhaHash(passwordEncoder.encode(request.senha()));
         novoUsuario.setTipoVinculo(request.tipoVinculo());
 
+        // 4. Salva no banco de dados
         usuarioRepository.save(novoUsuario);
+        
         return "Usuário criado com sucesso!";
     }
 }
