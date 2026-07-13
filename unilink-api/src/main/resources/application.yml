@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/unilink_db
+    url: jdbc:postgresql://localhost:5439/unilink_db
     username: unilink_user
     password: unilink_password
     driver-class-name: org.postgresql.Driver
