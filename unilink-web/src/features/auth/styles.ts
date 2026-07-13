@@ -140,7 +140,7 @@ export const InputIcon = styled.div`
   font-size: 20px;
 `;
 
-export const PasswordToggle = styled.div`
+export const PasswordToggle = styled.button`
   position: absolute;
   right: 12px;
   color: ${colors.placeholder};
@@ -148,6 +148,9 @@ export const PasswordToggle = styled.div`
   display: flex;
   align-items: center;
   font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `;
 
 export const ForgotPasswordLink = styled.a`

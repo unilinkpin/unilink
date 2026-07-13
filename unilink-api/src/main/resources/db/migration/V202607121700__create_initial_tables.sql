@@ -10,7 +10,7 @@ CREATE TYPE enum_tipo_notificacao AS ENUM ('Resposta Fórum', 'Lembrete Evento',
 -- 2. TABELAS DE INSTITUIÇÕES E CURSOS
 -- ==========================================
 CREATE TABLE Instituicoes (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     endereco VARCHAR(255),
@@ -21,8 +21,8 @@ CREATE TABLE Instituicoes (
 );
 
 CREATE TABLE Cursos (
-    id SERIAL PRIMARY KEY,
-    id_instituicao INT NOT NULL REFERENCES Instituicoes(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_instituicao BIGINT NOT NULL REFERENCES Instituicoes(id) ON DELETE CASCADE, -- BIGINT
     nome VARCHAR(150) NOT NULL,
     turno VARCHAR(50), 
     duracao_anos INT,
@@ -33,8 +33,8 @@ CREATE TABLE Cursos (
 -- 3. TABELAS DE USUÁRIOS E PERFIS
 -- ==========================================
 CREATE TABLE Usuarios (
-    id SERIAL PRIMARY KEY,
-    id_instituicao INT REFERENCES Instituicoes(id) ON DELETE SET NULL,
+    id BIGSERIAL PRIMARY KEY,
+    id_instituicao BIGINT REFERENCES Instituicoes(id) ON DELETE SET NULL, -- BIGINT
     nome_completo VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL, 
     senha_hash VARCHAR(255) NOT NULL,
@@ -44,27 +44,27 @@ CREATE TABLE Usuarios (
 );
 
 CREATE TABLE Perfis_Estudantes (
-    id_usuario INT PRIMARY KEY REFERENCES Usuarios(id) ON DELETE CASCADE,
-    id_curso INT REFERENCES Cursos(id) ON DELETE SET NULL,
+    id_usuario BIGINT PRIMARY KEY REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
+    id_curso BIGINT REFERENCES Cursos(id) ON DELETE SET NULL, -- BIGINT
     numero_matricula VARCHAR(50) UNIQUE NOT NULL,
     comprovante_vinculo_url VARCHAR(255) 
 );
 
 CREATE TABLE Perfis_Professores (
-    id_usuario INT PRIMARY KEY REFERENCES Usuarios(id) ON DELETE CASCADE,
+    id_usuario BIGINT PRIMARY KEY REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
     cargo_funcao VARCHAR(100), 
     area_atuacao_curso VARCHAR(150),
     lattes_url VARCHAR(255)
 );
 
 CREATE TABLE Areas_Interesse (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE Usuarios_Interesses (
-    id_usuario INT REFERENCES Usuarios(id) ON DELETE CASCADE,
-    id_area_interesse INT REFERENCES Areas_Interesse(id) ON DELETE CASCADE,
+    id_usuario BIGINT REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
+    id_area_interesse BIGINT REFERENCES Areas_Interesse(id) ON DELETE CASCADE, -- BIGINT
     PRIMARY KEY (id_usuario, id_area_interesse)
 );
 
@@ -72,8 +72,8 @@ CREATE TABLE Usuarios_Interesses (
 -- 4. EVENTOS E INSCRIÇÕES DIRETAS (SEM TAXAS)
 -- ==========================================
 CREATE TABLE Eventos (
-    id SERIAL PRIMARY KEY,
-    id_instituicao INT REFERENCES Instituicoes(id) ON DELETE SET NULL,
+    id BIGSERIAL PRIMARY KEY,
+    id_instituicao BIGINT REFERENCES Instituicoes(id) ON DELETE SET NULL, -- BIGINT
     titulo VARCHAR(200) NOT NULL, 
     descricao TEXT,
     imagem_url VARCHAR(255),
@@ -86,9 +86,9 @@ CREATE TABLE Eventos (
 );
 
 CREATE TABLE Inscricoes (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
-    id_evento INT NOT NULL REFERENCES Eventos(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_usuario BIGINT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
+    id_evento BIGINT NOT NULL REFERENCES Eventos(id) ON DELETE CASCADE, -- BIGINT
     status enum_status_inscricao NOT NULL DEFAULT 'Inscrito',
     data_inscricao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (id_usuario, id_evento)
@@ -98,8 +98,8 @@ CREATE TABLE Inscricoes (
 -- 5. FÓRUM E INTERAÇÕES (MÓDULO SOCIAL)
 -- ==========================================
 CREATE TABLE Forum_Topicos (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_usuario BIGINT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
     categoria enum_categoria_forum NOT NULL,
     titulo VARCHAR(200) NOT NULL,
     corpo_postagem TEXT NOT NULL, 
@@ -107,18 +107,18 @@ CREATE TABLE Forum_Topicos (
 );
 
 CREATE TABLE Forum_Comentarios (
-    id SERIAL PRIMARY KEY,
-    id_topico INT NOT NULL REFERENCES Forum_Topicos(id) ON DELETE CASCADE,
-    id_usuario INT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_topico BIGINT NOT NULL REFERENCES Forum_Topicos(id) ON DELETE CASCADE, -- BIGINT
+    id_usuario BIGINT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
     conteudo TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Favoritos (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_usuario BIGINT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
     tipo_entidade VARCHAR(50) NOT NULL,
-    id_entidade INT NOT NULL, 
+    id_entidade BIGINT NOT NULL, -- BIGINT
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (id_usuario, tipo_entidade, id_entidade)
 );
@@ -127,8 +127,8 @@ CREATE TABLE Favoritos (
 -- 6. NOTIFICAÇÕES
 -- ==========================================
 CREATE TABLE Notificacoes (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    id_usuario BIGINT NOT NULL REFERENCES Usuarios(id) ON DELETE CASCADE, -- BIGINT
     tipo enum_tipo_notificacao NOT NULL,
     mensagem TEXT NOT NULL,
     lida BOOLEAN DEFAULT FALSE,
