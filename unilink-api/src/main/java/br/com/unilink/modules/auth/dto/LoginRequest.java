@@ -1,0 +1,1 @@
+package br.com.unilink.modules.auth.dto; public record LoginRequest(String email, String senha) {}
