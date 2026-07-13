@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './features/auth/Login';
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
         {/* =========================================
             MÓDULO: AUTH & USER (DEV 1)
         ========================================= */}
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/login" element={<Login />} />
         {/* <Route path="/perfil" element={<Perfil />} /> */}
 
         {/* =========================================
