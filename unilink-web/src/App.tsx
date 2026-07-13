@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Navigate to="/auth/login" />} />
 
         {/* Rotas de Autenticação */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/auth/login" element={<Login />} />
         {/* <Route path="/perfil" element={<Perfil />} /> */}
 
         {/* A ROTA QUE ESTAVA FALTANDO! 👇 */}
