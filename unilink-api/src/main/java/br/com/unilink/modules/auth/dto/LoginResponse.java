@@ -1,0 +1,1 @@
+package br.com.unilink.modules.auth.dto; public record LoginResponse(Long id, String nome, String email, String tipoVinculo) {}
