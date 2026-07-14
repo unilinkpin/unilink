@@ -38,4 +38,14 @@ public class DiscoveryController {
         List<Evento> posts = discoveryService.explorarPosts(busca);
         return ResponseEntity.ok(posts);
     }
+
+    // GET /api/discovery/instituicoes/{id}
+    @GetMapping("/instituicoes/{id}")
+    public ResponseEntity<br.com.unilink.modules.discovery.dto.CampusResponseDTO> getDetalhesCampus(@PathVariable Long id) {
+        return discoveryService.listarInstituicoes().stream()
+                .filter(inst -> inst.getId().equals(id))
+                .findFirst()
+                .map(inst -> ResponseEntity.ok(new br.com.unilink.modules.discovery.dto.CampusResponseDTO(inst)))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
