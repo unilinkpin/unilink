@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
+import Campus from './features/discovery/Campus';
 
 function App() {
   return (
@@ -23,9 +24,9 @@ function App() {
         {/* =========================================
             MÓDULO: DISCOVERY & CAMPUS (DEV 2)
         ========================================= */}
-        {/* <Route path="/" element={<Home />} /> */}
+        {/*<Route path="/" element={<Home />} />*/}
         {/* <Route path="/explorar" element={<Explorar />} /> */}
-        {/* <Route path="/campus" element={<Campus />} /> */}
+        { <Route path="/campus" element={<Campus />} /> }
 
         {/* =========================================
             MÓDULO: INTERACTION (DEV 3)

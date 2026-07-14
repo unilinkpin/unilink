@@ -37,4 +37,7 @@ public class Instituicao {
 
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "instituicao", fetch = FetchType.LAZY)
+    private java.util.List<Curso> cursos;
 }
