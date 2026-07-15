@@ -1,9 +1,8 @@
-// Active: 1775146483247@@localhost@3306
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { api } from '../../core/api';
-import { FaArrowLeft, FaSearch, FaMapMarkerAlt, FaClock, FaInfoCircle, FaLocationArrow, FaChevronRight } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaMapMarkerAlt, FaClock, FaInfoCircle, FaLocationArrow, FaChevronRight } from 'react-icons/fa';
+import Layout from '../../core/Layout'; 
 
 // --- IMPORTANDO AS SUAS IMAGENS LOCAIS ---
 import imgMapaUfam from '../../assets/mapa_ufam.png';
@@ -35,7 +34,6 @@ interface CampusData {
 export default function Campus() {
   const [campus, setCampus] = useState<CampusData | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   const [expandirCursos, setExpandirCursos] = useState(false);
   const [expandirProjetos, setExpandirProjetos] = useState(false);
@@ -53,8 +51,8 @@ export default function Campus() {
       });
   }, []);
 
-  if (loading) return <LoadingScreen>Carregando Campus...</LoadingScreen>;
-  if (!campus) return <LoadingScreen>Erro ao carregar os dados.</LoadingScreen>;
+  if (loading) return <Layout><LoadingScreen>Carregando Campus...</LoadingScreen></Layout>;
+  if (!campus) return <Layout><LoadingScreen>Erro ao carregar os dados.</LoadingScreen></Layout>;
 
   // Listas de backup com mais exemplos para a tela ficar cheia e bonita
   const listaCursos = campus.cursos && campus.cursos.length > 0 ? campus.cursos : [
@@ -89,16 +87,8 @@ export default function Campus() {
   const imagensEventos = [imgEvento1, imgEvento2];
 
   return (
-    <PageBackground>
+    <Layout>
       <Container>
-        <Header>
-          <IconButton onClick={() => navigate('/home')} title="Voltar para Home">
-            <FaArrowLeft />
-          </IconButton>
-          <HeaderTitle>UFAM</HeaderTitle>
-          <IconButton title="Buscar"><FaSearch /></IconButton>
-        </Header>
-
         <MapContainer imagem={imgMapaUfam}>
           <MapOverlay />
           <MapBadge>
@@ -208,19 +198,11 @@ export default function Campus() {
 
         </Content>
       </Container>
-    </PageBackground>
+    </Layout>
   );
 }
 
-// --- ESTILOS VISUAIS TELA CHEIA E INTERATIVOS ---
-const PageBackground = styled.div`
-  background-color: #f8f9fa;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
+// --- ESTILOS VISUAIS ---
 const Container = styled.div`
   font-family: 'Inter', sans-serif;
   background: #fff;
@@ -229,24 +211,12 @@ const Container = styled.div`
   min-height: 100vh;
   padding-bottom: 60px;
   overflow-x: hidden;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 `;
 
 const LoadingScreen = styled.div`
   display: flex; justify-content: center; align-items: center; height: 100vh; font-weight: bold; color: #7f7f7f;
-`;
-
-const Header = styled.header`
-  display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
-  position: sticky; top: 0; background: rgba(255,255,255,0.9); z-index: 10; backdrop-filter: blur(10px);
-`;
-
-const IconButton = styled.button`
-  background: #f5f5f5; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;
-  &:hover { background: #e0e0e0; transform: translateY(-1px); }
-`;
-
-const HeaderTitle = styled.h2`
-  margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 1px;
 `;
 
 const MapContainer = styled.div<{ imagem: string }>`
@@ -258,10 +228,14 @@ const MapContainer = styled.div<{ imagem: string }>`
   justify-content: center; 
   align-items: center; 
   position: relative;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;
 
 const MapOverlay = styled.div`
   position: absolute; inset: 0; background: rgba(0,0,0,0.15);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;
 
 const MapBadge = styled.div`
@@ -269,12 +243,13 @@ const MapBadge = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 30px 20px;
+  padding: 30px 40px;
   margin-top: -30px;
   background: #fff;
   border-radius: 30px 30px 0 0;
   position: relative;
   z-index: 3;
+  @media (max-width: 768px) { padding: 30px 20px; }
 `;
 
 const WelcomeTag = styled.span`
@@ -282,16 +257,17 @@ const WelcomeTag = styled.span`
 `;
 
 const Title = styled.h1`
-  margin: 0 0 10px 0; font-size: 26px; font-weight: 800; color: #111;
+  margin: 0 0 10px 0; font-size: 32px; font-weight: 800; color: #111;
 `;
 
 const Description = styled.p`
-  color: #7f7f7f; font-size: 14px; margin-bottom: 25px; line-height: 1.6;
+  color: #7f7f7f; font-size: 15px; margin-bottom: 25px; line-height: 1.6; max-width: 600px;
 `;
 
 const ActionRow = styled.div`
-  display: flex; align-items: center; background: #fff; border: 1px solid #f0f0f0; border-radius: 20px; padding: 15px; margin-bottom: 25px; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; background: #fff; border: 1px solid #f0f0f0; border-radius: 20px; padding: 15px; margin-bottom: 30px; cursor: pointer; transition: 0.2s; width: fit-content; padding-right: 25px;
   &:hover { background: #fafafa; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+  @media (max-width: 500px) { width: auto; padding-right: 15px; }
 `;
 
 const ActionIcon = styled.div`
@@ -299,7 +275,7 @@ const ActionIcon = styled.div`
 `;
 
 const ActionTexts = styled.div`
-  flex: 1;
+  flex: 1; margin-right: 20px;
   strong { display: block; font-size: 15px; margin-bottom: 4px; color: #111; }
   span { font-size: 12px; color: #999; }
 `;
@@ -309,7 +285,7 @@ const ActionArrow = styled.div`
 `;
 
 const StatusGrid = styled.div`
-  display: flex; gap: 15px; margin-bottom: 35px;
+  display: flex; gap: 15px; margin-bottom: 40px; max-width: 600px;
   @media (max-width: 500px) { flex-direction: column; }
 `;
 
@@ -328,7 +304,7 @@ const SectionHeader = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 18px; margin: 0; font-weight: 800; color: #111;
+  font-size: 20px; margin: 0; font-weight: 800; color: #111;
 `;
 
 const SeeAll = styled.span`
@@ -342,7 +318,7 @@ const ResponsiveList = styled.div<{ expandido: boolean }>`
   overflow-x: ${props => props.expandido ? 'visible' : 'auto'}; 
   flex-wrap: ${props => props.expandido ? 'wrap' : 'nowrap'};
   padding-bottom: 15px; 
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   
   &::-webkit-scrollbar { display: none; }
   
@@ -368,12 +344,11 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   
-  /* Mantém as alturas alinhadas perfeitamente no Mobile e no Desktop */
   height: 380px; 
   
   @media (min-width: 650px) { min-width: 0; }
   
-  &:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+  &:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
 `;
 
 const CardTag = styled.span<{ cor?: string }>`
