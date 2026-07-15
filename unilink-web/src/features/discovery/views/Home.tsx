@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { discoveryService } from '../services/api';
 import * as S from './Home.styles';
-import logoImg from '../../../assets/logo.png'; 
+import logoImg from '../../../assets/logoUnilink.png'; 
+import { useNavigate } from 'react-router-dom';
 
 interface Instituicao {
   id: number;
@@ -17,6 +18,7 @@ interface Evento {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
   const [instituicoes, setInstituicoes] = useState<Instituicao[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,7 +35,7 @@ export default function Home() {
       } catch (err) {
         console.error("Erro ao sincronizar com a API local, usando dados de fallback:", err);
         
-        // MOCK DE BACKUP: Evita que o app quebre ou fique em loop infinito se o banco der erro 500
+        // MOCK DE BACKUP
         setInstituicoes([
           { id: 1, nome: "UFAM", localizacao: "Instituto de Ciências Sociais, Educação e Zootecnia" },
           { id: 2, nome: "UEA", localizacao: "Centro de Estudos Superiores de Parintins" },
@@ -56,7 +58,7 @@ export default function Home() {
             id: 3, 
             titulo: "Workshop de UI/UX Design", 
             descricao: "Aprenda na prática os fundamentos para construir interfaces atraentes, eficientes e focadas no usuário.",
-            imagem: "https://images.unsplash.com/photo-1581291518655-9523c932dedf?q=80&w=400"
+            imagem: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=400"
           }
         ]);
       } finally {
@@ -85,7 +87,7 @@ export default function Home() {
   return (
     <S.LayoutContainer>
       
-      {/* 1. SIDEBAR LATERAL ESQUERDA (ESTILO CÁPSULA DO FIGMA) */}
+      {/* 1. SIDEBAR LATERAL ESQUERDA (SÓ APARECE EM DESKTOP) */}
       <S.Sidebar>
         <S.SidebarItem active>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -93,7 +95,7 @@ export default function Home() {
             <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
         </S.SidebarItem>
-        <S.SidebarItem>
+        <S.SidebarItem onClick={() => navigate('/explorar')} style={{ cursor: 'pointer' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <rect x="3" y="3" width="7" height="7" />
             <rect x="14" y="3" width="7" height="7" />
@@ -121,8 +123,8 @@ export default function Home() {
         <S.Header>
           <S.HeaderLeft>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img style={{ width: 32, height: 32, borderRadius: '50%' }} src={logoImg} alt="Logo" />
-              <S.LogoTitle>UniLink</S.LogoTitle>
+              <img style={{ width: 150, height: 70, borderRadius: '50%' }} src={logoImg} alt="Logo" />
+              <S.LogoTitle></S.LogoTitle>
             </div>
           </S.HeaderLeft>
 
@@ -145,7 +147,7 @@ export default function Home() {
             </S.NavLinks>
 
             {/* Botão de Autenticação */}
-            <S.ButtonEntrar>Entrar</S.ButtonEntrar>
+            <S.ButtonEntrar>SAIR</S.ButtonEntrar>
           </S.HeaderRight>
         </S.Header>
 
@@ -165,13 +167,6 @@ export default function Home() {
                 <S.BannerButton variant="light">Saiba mais</S.BannerButton>
               </S.BannerButtons>
             </S.BannerLeft>
-
-            <S.BannerRight>
-              <S.BannerImage 
-                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=400" 
-                alt="Estudantes universitários colaborando" 
-              />
-            </S.BannerRight>
           </S.Banner>
 
           {/* SEÇÃO: NOTÍCIAS RECENTES */}
@@ -243,7 +238,6 @@ export default function Home() {
 
             <S.GridEventos>
               {eventos.slice(0, 3).map((evento, index) => {
-                // Alternância clássica de cores baseada na posição para bater com o design do Figma
                 const bgType = index === 0 ? 'green' : index === 1 ? 'dark' : undefined;
                 const isDark = index === 1;
 
@@ -279,7 +273,11 @@ export default function Home() {
 
             <S.GridCampi>
               {instituicoes.slice(0, 3).map((inst) => (
-                <S.CampusItem key={inst.id}>
+                <S.CampusItem 
+                  onClick={() => navigate('/campus')} 
+                  style={{ cursor: 'pointer' }}
+                  key={inst.id}
+                >
                   <S.CampusIconContainer>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2">
                       <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
@@ -306,6 +304,39 @@ export default function Home() {
 
         </S.ContentArea>
       </S.MainWrapper>
+
+      {/* 3. MENU INFERIOR - BOTTOM NAVIGATION MOBILE (SÓ APARECE EM CELULAR/TABLET) */}
+      <S.BottomNavMobileOnly>
+        <S.NavItemMobile active>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </S.NavItemMobile>
+
+        <S.NavItemMobile onClick={() => navigate('/explorar')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+        </S.NavItemMobile>
+
+        <S.NavItemMobile>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </S.NavItemMobile>
+
+        <S.NavItemMobile>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </S.NavItemMobile>
+      </S.BottomNavMobileOnly>
+
     </S.LayoutContainer>
   );
 }

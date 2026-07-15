@@ -3,6 +3,7 @@ import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Campus from './features/discovery/Campus';
 import Home from './features/discovery/views/Home';
+import Explorar from './features/discovery/views/Explorar';
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             MÓDULO: DISCOVERY & CAMPUS (DEV 2)
         ========================================= */}
         {/*<Route path="/" element={<Home />} />*/}
-        {/* <Route path="/explorar" element={<Explorar />} /> */}
+        <Route path="/explorar" element={<Explorar />} />
         <Route path="/home" element={<Home />} />
         { <Route path="/campus" element={<Campus />} /> }
 
