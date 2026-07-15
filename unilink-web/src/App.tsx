@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Campus from './features/discovery/Campus';
+import Home from './features/discovery/views/Home';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         ========================================= */}
         {/*<Route path="/" element={<Home />} />*/}
         {/* <Route path="/explorar" element={<Explorar />} /> */}
+        <Route path="/home" element={<Home />} />
         { <Route path="/campus" element={<Campus />} /> }
 
         {/* =========================================
