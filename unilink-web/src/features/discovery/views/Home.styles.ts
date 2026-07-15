@@ -22,16 +22,16 @@ export const LogoTitle = styled.h1`
   letter-spacing: -0.5px;
 `;
 
-
 // Layout principal que separa a Sidebar lateral do restante da página
 export const LayoutContainer = styled.div`
   display: flex;
   min-height: 100vh;
   background-color: #F8F9FA;
   font-family: 'Inter', sans-serif;
+  position: relative;
 `;
 
-/* --- SIDEBAR LATERAL (Estilo Cápsula do Figma) --- */
+/* --- SIDEBAR LATERAL (Estilo Cápsula do Figma - Desktop) --- */
 export const Sidebar = styled.aside`
   width: 80px;
   background-color: ${colors.black};
@@ -49,7 +49,7 @@ export const Sidebar = styled.aside`
   z-index: 100;
 
   @media (max-width: 1024px) {
-    display: none; /* Oculta no mobile/tablet */
+    display: none; /* Oculta completamente no mobile/tablet */
   }
 `;
 
@@ -71,6 +71,44 @@ export const SidebarItem = styled.button<{ active?: boolean }>`
   }
 `;
 
+/* --- BOTTOM NAVIGATION FIXED (Mobile & Tablet - Estilo Cápsula Inferior) --- */
+export const BottomNavMobileOnly = styled.nav`
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 32px);
+    max-width: 400px;
+    height: 72px;
+    padding: 0 24px;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: ${colors.black};
+    border-radius: 32px;
+    box-sizing: border-box;
+    z-index: 110;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+export const NavItemMobile = styled.button<{ active?: boolean }>`
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: ${props => props.active ? colors.black : colors.white};
+  background-color: ${props => props.active ? colors.primary : 'transparent'};
+  transition: all 0.2s ease;
+`;
+
 /* --- ÁREA PRINCIPAL DA PÁGINA (Tudo à direita da Sidebar) --- */
 export const MainWrapper = styled.div`
   flex: 1;
@@ -81,7 +119,7 @@ export const MainWrapper = styled.div`
 
   @media (max-width: 1024px) {
     margin-left: 0;
-    padding: 0 16px;
+    padding: 0 16px 120px 16px; /* Aumentado padding-bottom no mobile para os cards não sumirem atrás da barra fixa */
   }
 `;
 
@@ -141,7 +179,7 @@ export const NavLinks = styled.nav`
     transition: color 0.2s;
 
     &:hover {
-      color: colors.primary;
+      color: ${colors.primary};
     }
   }
 
@@ -151,7 +189,7 @@ export const NavLinks = styled.nav`
 `;
 
 export const ButtonEntrar = styled.button`
-  background-color: ${colors.primary};
+  background-color: red;
   color: ${colors.black};
   border: none;
   border-radius: 20px;
@@ -176,27 +214,30 @@ export const ContentArea = styled.main`
 
 /* --- BANNER PRINCIPAL --- */
 export const Banner = styled.section`
-  background-color: #D6ECB2; /* Verde suave do fundo do Banner */
-  border-radius: 32px;
-  padding: 48px;
+  background-color: #D6ECB2; 
+  border-radius: 28px;
+  padding: 24px 40px; 
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
   overflow: hidden;
-  min-height: 280px;
+  min-height: 200px; 
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
-    padding: 32px;
-    gap: 32px;
+    padding: 24px;
+    gap: 20px;
   }
 `;
 
 export const BannerLeft = styled.div`
-  max-width: 50%;
+  max-width: 60%;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -209,57 +250,70 @@ export const BannerRight = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 `;
 
 export const BannerImage = styled.img`
-  width: 320px;
-  height: 200px;
+  width: 260px; 
+  height: 160px; 
   object-fit: cover;
-  border-radius: 32px;
-  border-bottom-right-radius: 0px; /* Recorte geométrico do Figma */
-  clip-path: ellipse(100% 100% at 50% 50%); /* Ajustado para formato oval sutil */
+  border-radius: 24px;
+  border-bottom-right-radius: 0px; 
+  clip-path: ellipse(100% 100% at 50% 50%); 
+
+  @media (max-width: 900px) {
+    display: none; 
+  }
 `;
 
 export const BannerButtons = styled.div`
   display: flex;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 16px; 
 `;
 
 export const BannerButton = styled.button<{ variant?: 'dark' | 'light' }>`
-  padding: 12px 24px;
+  padding: 10px 20px; 
   border-radius: 20px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   border: none;
   cursor: pointer;
   background-color: ${props => props.variant === 'dark' ? colors.black : colors.white};
   color: ${props => props.variant === 'dark' ? colors.white : colors.black};
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 export const BadgeWelcome = styled.span`
   background-color: ${colors.black};
   color: ${colors.white};
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
-  padding: 6px 12px;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border-radius: 10px;
   letter-spacing: 1px;
+  width: fit-content;
 `;
 
 export const BannerTitle = styled.h1`
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 36px;
+  font-size: 28px; 
   font-weight: 700;
   color: ${colors.black};
-  margin: 16px 0 8px 0;
+  margin: 12px 0 6px 0;
+  letter-spacing: -0.5px;
 `;
 
 export const BannerSubtitle = styled.p`
-  font-size: 16px;
+  font-size: 14px; 
   color: #555555;
   margin: 0;
-  line-height: 24px;
+  line-height: 20px;
+  max-width: 90%;
 `;
 
 /* --- ESTRUTURA GERAL DE SEÇÕES --- */
@@ -300,8 +354,6 @@ export const RoundBlackButton = styled.button`
 `;
 
 /* --- GRIDS RESPONSIVOS --- */
-
-// Grid de 4 Colunas (Notícias)
 export const GridNoticias = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -315,7 +367,6 @@ export const GridNoticias = styled.div`
   }
 `;
 
-// Grid de 3 Colunas (Eventos)
 export const GridEventos = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -329,7 +380,6 @@ export const GridEventos = styled.div`
   }
 `;
 
-// Grid de 3 Colunas (Campi)
 export const GridCampi = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -340,7 +390,7 @@ export const GridCampi = styled.div`
   }
 `;
 
-/* --- CARDS DE NOTÍCIAS (Estilo Figma) --- */
+/* --- CARDS --- */
 export const NewsCard = styled.article`
   background-color: ${colors.white};
   border: 1px solid ${colors.border};
@@ -419,7 +469,6 @@ export const NewsDescription = styled.p`
   overflow: hidden;
 `;
 
-/* --- CARDS DE EVENTOS (Cores Variadas do Figma) --- */
 export const EventCard = styled.article<{ bgType?: 'green' | 'dark' }>`
   background-color: ${props => 
     props.bgType === 'green' ? colors.cardEventGreen : 
@@ -462,7 +511,6 @@ export const EventButton = styled.button<{ bgType?: 'green' | 'dark' }>`
   color: ${props => props.bgType === 'green' || props.bgType === 'dark' ? colors.black : colors.white};
 `;
 
-/* --- ITEMS DE CAMPI --- */
 export const CampusItem = styled.div`
   display: flex;
   align-items: center;
