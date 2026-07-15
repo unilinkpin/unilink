@@ -3,46 +3,33 @@ import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Campus from './features/discovery/Campus';
 import Home from './features/discovery/views/Home';
+import Perfil from './features/user/view/Perfil';
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* =========================================
-            MÓDULO: AUTH & USER (DEV 1)
+            MÓDULO: AUTH & USER 
         ========================================= */}
 
-        {/* Rota padrão redirecionando para o login */}
         <Route path="/" element={<Navigate to="/auth/login" />} />
 
         {/* Rotas de Autenticação */}
         <Route path="/auth/login" element={<Login />} />
-        {/* <Route path="/perfil" element={<Perfil />} /> */}
-
-        {/* A ROTA QUE ESTAVA FALTANDO! 👇 */}
         <Route path="/auth/register" element={<Register />} />
+        <Route path="/perfil" element={<Perfil />} /> 
 
         {/* =========================================
-            MÓDULO: DISCOVERY & CAMPUS (DEV 2)
+            MÓDULO: DISCOVERY & CAMPUS 
         ========================================= */}
-        {/*<Route path="/" element={<Home />} />*/}
-        {/* <Route path="/explorar" element={<Explorar />} /> */}
         <Route path="/home" element={<Home />} />
         { <Route path="/campus" element={<Campus />} /> }
 
-        {/* =========================================
-            MÓDULO: INTERACTION (DEV 3)
-        ========================================= */}
-        {/* <Route path="/forum" element={<Forum />} /> */}
-        {/* <Route path="/inscricoes" element={<Inscricoes />} /> */}
-
+       
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-/*quando cada uma for criar sua tela, 
-é só descomentar a sua própria linha e
- ninguém esbarra no código da outra! */
