@@ -25,7 +25,7 @@ export default function Login() {
     try {
       const userData = await authService.login(email, senha);
       localStorage.setItem('@UniLink:user', JSON.stringify(userData));
-      navigate('/campus'); 
+      navigate('/home'); 
     } catch (err: any) {
       const errorMessage = err.response?.data || 'Ocorreu um erro ao tentar entrar. Tente novamente.';
       setError(errorMessage);
