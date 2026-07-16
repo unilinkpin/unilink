@@ -20,11 +20,12 @@ export const HeaderWrapper = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   gap: 24px;
   @media (max-width: 1024px) {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 16px;
   }
 `;
 
@@ -34,9 +35,9 @@ export const HeaderLeftRow = styled.div`
   gap: 32px;
   flex: 1;
   width: 100%;
-  @media (max-width: 600px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 16px;
   }
 `;
@@ -59,13 +60,18 @@ export const SearchBar = styled.div`
   background: ${colors.white};
   border-radius: 24px;
   border: 1px solid ${colors.border};
+  box-sizing: border-box;
   input {
     border: none;
     outline: none;
     width: 100%;
     font-size: 15px;
     color: ${colors.black};
+    background: transparent;
     &::placeholder { color: ${colors.textSecondary}; }
+  }
+  @media (max-width: 1024px) {
+    max-width: 100%;
   }
 `;
 
@@ -110,6 +116,9 @@ export const CategoriesContainer = styled.div`
   border-bottom: 1px solid ${colors.border};
   padding-bottom: 12px;
   overflow-x: auto;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
   &::-webkit-scrollbar {
     display: none;
   }

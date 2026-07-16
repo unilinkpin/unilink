@@ -24,44 +24,27 @@ export const LogoTitle = styled.h1`
 
 export const Header = styled.header`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  height: 80px;
-  background-color: transparent;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 15px;
+  margin-bottom: 24px;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 export const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  display: none;
 `;
 
 export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 32px;
-`;
-
-export const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #F1F3F5;
-  border-radius: 20px;
-  padding: 8px 16px;
-  gap: 8px;
-  width: 200px;
-  input {
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 14px;
+  gap: 24px;
+  @media (max-width: 768px) {
     width: 100%;
-    &::placeholder {
-      color: #999;
-    }
+    justify-content: center;
   }
 `;
 
@@ -79,22 +62,9 @@ export const NavLinks = styled.nav`
     }
   }
   @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const ButtonEntrar = styled.button`
-  background-color: #ff4d4d;
-  color: ${colors.white};
-  border: none;
-  border-radius: 20px;
-  padding: 8px 24px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  &:hover {
-    background-color: #ff3333;
+    width: 100%;
+    justify-content: space-around;
+    gap: 8px;
   }
 `;
 

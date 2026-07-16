@@ -79,15 +79,7 @@ export default function Home() {
   return (
     <Layout>
       <S.Header>
-        <S.HeaderLeft>
-          <S.SearchBar>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7F7F7F" strokeWidth="2.5">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" placeholder="Buscar no UniLink..." />
-          </S.SearchBar>
-        </S.HeaderLeft>
+        <S.HeaderLeft />
         <S.HeaderRight>
           <S.NavLinks>
             <a href="#noticias">Notícias</a>
