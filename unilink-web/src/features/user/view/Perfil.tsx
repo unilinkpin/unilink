@@ -1,26 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../../core/Layout';
-import { FaBars, FaCog, FaPen, FaShareSquare, FaMapMarkerAlt, FaPlus } from 'react-icons/fa';
+import { FaPen, FaShareSquare, FaMapMarkerAlt, FaPlus, FaUser } from 'react-icons/fa';
 import * as S from './Perfil.styles';
 import { perfilService, type PerfilData } from '../services/perfilApi';
+
+type TabOpcoes = 'Projetos' | 'Eventos' | 'Conquistas';
 
 export default function Perfil() {
   const [perfil, setPerfil] = useState<PerfilData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<TabOpcoes>('Projetos');
 
   useEffect(() => {
-    perfilService.getPerfil(1)
+    const usuarioLogadoRaw = localStorage.getItem('@UniLink:user');
+    let usuarioLogado: any = null;
+
+    if (usuarioLogadoRaw) {
+      try {
+        usuarioLogado = JSON.parse(usuarioLogadoRaw);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    perfilService.getPerfil(usuarioLogado?.id || 1)
       .then(data => {
-        setPerfil(data);
+        if (usuarioLogado) {
+          setPerfil({
+            ...data,
+            nome: usuarioLogado.nomeCompleto || usuarioLogado.nome || data.nome,
+            tipoVinculo: usuarioLogado.tipoVinculo || data.tipoVinculo,
+          });
+        } else {
+          setPerfil(data);
+        }
         setLoading(false);
       })
       .catch(() => {
         setPerfil({
-          id: 1,
-          nome: "Mariana Costa",
-          tipoVinculo: "Estudante",
+          id: usuarioLogado?.id || 1,
+          nome: usuarioLogado?.nomeCompleto || usuarioLogado?.nome || "Mariana Costa",
+          tipoVinculo: usuarioLogado?.tipoVinculo || "Estudante",
           instituicaoNome: "UFAM Parintins",
-          fotoPerfilUrl: "https://randomuser.me/api/portraits/women/44.jpg",
+          fotoPerfilUrl: usuarioLogado?.fotoPerfilUrl || "",
           pontos: 450,
           totalEventos: 12,
           totalProjetos: 3,
@@ -35,71 +57,96 @@ export default function Perfil() {
   }, []);
 
   if (loading || !perfil) {
-    return <Layout><div style={{ textAlign: 'center', marginTop: '50px' }}>Carregando Perfil...</div></Layout>;
+    return <Layout><div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'Inter' }}>Carregando Perfil...</div></Layout>;
   }
+
+  const imagensProjetos = [
+    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=400",
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400",
+    "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=400"
+  ];
 
   return (
     <Layout>
       <S.Container>
-        {/* Header visível apenas no mobile */}
-        <S.MobileHeader>
-          <S.IconButton><FaBars /></S.IconButton>
-          <S.ProfileTitle>Perfil</S.ProfileTitle>
-          <S.IconButton><FaCog /></S.IconButton>
-        </S.MobileHeader>
+        <S.CoverBanner />
+        
+        <S.ProfileHeader>
+          <S.AvatarWrapper>
+            {perfil.fotoPerfilUrl ? (
+              <img src={perfil.fotoPerfilUrl} alt={perfil.nome} />
+            ) : (
+              <S.DefaultAvatarPlaceholder>
+                <FaUser />
+              </S.DefaultAvatarPlaceholder>
+            )}
+          </S.AvatarWrapper>
+          
+          <S.ActionsRow>
+            <S.ActionButton primary>
+              Editar perfil <FaPen size={12} />
+            </S.ActionButton>
+            <S.ActionButton>
+              <FaShareSquare size={16} /> Compartilhar
+            </S.ActionButton>
+          </S.ActionsRow>
+        </S.ProfileHeader>
 
-        <S.AvatarWrapper>
-          <S.AvatarImage src={perfil.fotoPerfilUrl} alt={perfil.nome} />
-        </S.AvatarWrapper>
-
-        <S.UserName>{perfil.nome}</S.UserName>
-        <S.UserSub>
-          {perfil.tipoVinculo} <S.Dot /> <FaMapMarkerAlt size={12} color="#888" /> {perfil.instituicaoNome}
-        </S.UserSub>
+        <S.InfoSection>
+          <S.UserName>{perfil.nome}</S.UserName>
+          <S.UserSub>
+            {perfil.tipoVinculo} <FaMapMarkerAlt size={14} color="#A7D631" /> {perfil.instituicaoNome}
+          </S.UserSub>
+        </S.InfoSection>
 
         <S.StatsContainer>
-          <S.StatItem>
+          <S.StatItem onClick={() => setActiveTab('Conquistas')} style={{ cursor: 'pointer' }}>
             <strong>{perfil.pontos}</strong>
             <span>Pontos</span>
           </S.StatItem>
-          <S.StatItem>
+          <S.StatItem onClick={() => setActiveTab('Eventos')} style={{ cursor: 'pointer' }}>
             <strong>{perfil.totalEventos}</strong>
             <span>Eventos</span>
           </S.StatItem>
-          <S.StatItem>
+          <S.StatItem onClick={() => setActiveTab('Projetos')} style={{ cursor: 'pointer' }}>
             <strong>{perfil.totalProjetos}</strong>
             <span>Projetos</span>
           </S.StatItem>
         </S.StatsContainer>
 
-        <S.ActionsRow>
-          <S.EditButton>
-            Editar perfil <FaPen size={12} />
-          </S.EditButton>
-          <S.ShareButton>
-            <FaShareSquare size={16} />
-          </S.ShareButton>
-        </S.ActionsRow>
-
         <S.TabsRow>
-          <S.TabItem active>Projetos</S.TabItem>
-          <S.TabItem>Eventos</S.TabItem>
-          <S.TabItem>Conquistas</S.TabItem>
+          <S.TabItem active={activeTab === 'Projetos'} onClick={() => setActiveTab('Projetos')}>Projetos</S.TabItem>
+          <S.TabItem active={activeTab === 'Eventos'} onClick={() => setActiveTab('Eventos')}>Eventos</S.TabItem>
+          <S.TabItem active={activeTab === 'Conquistas'} onClick={() => setActiveTab('Conquistas')}>Conquistas</S.TabItem>
         </S.TabsRow>
 
-        <S.GridContainer>
-          {perfil.projetosMockados.map((proj) => (
-            <S.ProjectCard key={proj.id} themeType={proj.tema}>
-              <span style={{ textAlign: proj.tema === 'light' ? 'center' : 'left' }}>
-                {proj.nome}
-              </span>
-            </S.ProjectCard>
-          ))}
-          <S.AddCard>
-            <FaPlus />
-          </S.AddCard>
-        </S.GridContainer>
+        {activeTab === 'Projetos' && (
+          <S.GridContainer>
+            {perfil.projetosMockados.map((proj, index) => (
+              <S.ProjectCard key={proj.id} themeType={proj.tema} imagem={imagensProjetos[index % imagensProjetos.length]}>
+                <S.ProjectCardOverlay />
+                <span style={{ position: 'relative', zIndex: 2, textAlign: proj.tema === 'light' ? 'center' : 'left' }}>
+                  {proj.nome}
+                </span>
+              </S.ProjectCard>
+            ))}
+            <S.AddCard>
+              <FaPlus /> Adicionar Novo
+            </S.AddCard>
+          </S.GridContainer>
+        )}
 
+        {activeTab === 'Eventos' && (
+          <S.TabContentEmpty>
+            Nenhum evento inscrito no momento. Explore a aba de Campus ou Início para se inscrever!
+          </S.TabContentEmpty>
+        )}
+
+        {activeTab === 'Conquistas' && (
+          <S.TabContentEmpty>
+            Você possui {perfil.pontos} pontos acumulados. Continue participando de atividades para liberar novas conquistas!
+          </S.TabContentEmpty>
+        )}
       </S.Container>
     </Layout>
   );

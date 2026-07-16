@@ -4,6 +4,7 @@ import Register from './features/auth/Register';
 import Campus from './features/discovery/Campus';
 import Home from './features/discovery/views/Home';
 import Explorar from './features/discovery/views/Explorar';
+import Perfil from './features/user/view/Perfil';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         {/* Rotas de Autenticação */}
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
-
+        <Route path="/perfil" element={<Perfil />} />
 
         {/*<Route path="/" element={<Home />} />*/}
         <Route path="/explorar" element={<Explorar />} />
